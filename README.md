@@ -1,53 +1,156 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Gestion de Tâches
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Une application web de gestion de tâches développée avec Laravel, permettant aux utilisateurs de créer, organiser et suivre leurs tâches personnelles.
 
-## About Laravel
+## Fonctionnalités
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Authentification des utilisateurs** : Inscription, connexion et gestion des comptes
+- **Gestion des tâches** :
+  - Création, modification et suppression de tâches
+  - Statuts : À faire, En cours, Terminée
+  - Dates d'échéance
+  - Descriptions détaillées
+- **Organisation par catégories** : Classement des tâches par catégories personnalisables
+- **Tableau de bord** : Vue d'ensemble des tâches avec statistiques
+- **Interface responsive** : Design moderne avec Tailwind CSS
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Technologies utilisées
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Backend** : Laravel 11
+- **Base de données** : MySQL (via migrations Eloquent)
+- **Frontend** : Blade templates, Tailwind CSS
+- **Build tool** : Vite
+- **Authentification** : Laravel Breeze
+- **Debugging** : Laravel Debugbar, Telescope
 
-## Learning Laravel
+## Installation
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Prérequis
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- PHP 8.1 ou supérieur
+- Composer
+- Node.js et npm
+- MySQL ou autre base de données supportée par Laravel
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+### Étapes d'installation
 
-## Agentic Development
+1. **Cloner le repository**
+   ```bash
+   git clone <url-du-repo>
+   cd Gestion_tache
+   ```
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+2. **Installer les dépendances PHP**
+   ```bash
+   composer install
+   ```
 
-```bash
-composer require laravel/boost --dev
+3. **Installer les dépendances JavaScript**
+   ```bash
+   npm install
+   ```
 
-php artisan boost:install
+4. **Configuration de l'environnement**
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
+
+   Modifier le fichier `.env` avec vos paramètres de base de données.
+
+5. **Migrations et seeders**
+   ```bash
+   php artisan migrate
+   php artisan db:seed
+   ```
+
+6. **Construire les assets**
+   ```bash
+   npm run build
+   # ou pour le développement
+   npm run dev
+   ```
+
+7. **Démarrer le serveur**
+   ```bash
+   php artisan serve
+   ```
+
+L'application sera accessible sur `http://localhost:8000`
+
+## Utilisation
+
+### Comptes utilisateur
+
+- **Administrateur** : Peut gérer tous les utilisateurs et catégories
+- **Utilisateur standard** : Peut gérer ses propres tâches
+
+### Fonctionnalités principales
+
+1. **Inscription/Connexion** : Créer un compte ou se connecter
+2. **Tableau de bord** : Vue d'ensemble des tâches et statistiques
+3. **Gestion des tâches** :
+   - Lister toutes les tâches
+   - Filtrer par statut
+   - Créer une nouvelle tâche
+   - Modifier une tâche existante
+   - Supprimer une tâche
+4. **Gestion des catégories** : Créer et gérer les catégories de tâches
+
+## Structure du projet
+
+```
+app/
+├── Http/Controllers/          # Contrôleurs
+├── Models/                    # Modèles Eloquent
+├── Policies/                  # Politiques d'autorisation
+└── Providers/                 # Fournisseurs de services
+
+database/
+├── migrations/                # Migrations de base de données
+└── seeders/                   # Seeders pour données de test
+
+resources/
+├── views/                     # Templates Blade
+└── css/                       # Styles CSS
+
+routes/
+└── web.php                    # Routes de l'application
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+## Tests
 
-## Contributing
+```bash
+php artisan test
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Déploiement
 
-## Code of Conduct
+1. Configurer le serveur web (Apache/Nginx) pour pointer vers `public/`
+2. Configurer les variables d'environnement en production
+3. Optimiser l'application :
+   ```bash
+   php artisan config:cache
+   php artisan route:cache
+   php artisan view:cache
+   npm run build
+   ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Contribution
+
+1. Fork le projet
+2. Créer une branche pour votre fonctionnalité (`git checkout -b feature/nouvelle-fonctionnalite`)
+3. Commit vos changements (`git commit -am 'Ajout de nouvelle fonctionnalité'`)
+4. Push vers la branche (`git push origin feature/nouvelle-fonctionnalite`)
+5. Créer une Pull Request
+
+## Licence
+
+Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
+
+## Support
+
+Pour toute question ou problème, veuillez créer une issue sur GitHub.
 
 ## Security Vulnerabilities
 
