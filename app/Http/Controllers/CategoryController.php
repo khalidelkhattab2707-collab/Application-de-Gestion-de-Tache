@@ -1,0 +1,76 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Category;
+use Illuminate\Http\Request;
+
+class CategoryController extends Controller
+{
+    // Affiche la liste des catégories
+    public function index()
+    {
+        $categories = Category::withCount('tasks')->latest()->get();
+        return view('categories.index', compact('categories'));
+    }
+
+    // Affiche le formulaire de création
+    public function create()
+    {
+        return view('categories.create');
+    }
+
+    // Enregistre une nouvelle catégorie
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255|unique:categories',
+        ]);
+
+        Category::create($validated);
+
+        return redirect()->route('categories.index')
+            ->with('success', 'Catégorie créée avec succès !');
+    }
+
+    // Affiche une catégorie spécifique
+    public function show(Category $category)
+    {
+        $category->load('tasks');
+        return view('categories.show', compact('category'));
+    }
+
+    // Affiche le formulaire d'édition
+    public function edit(Category $category)
+    {
+        return view('categories.edit', compact('category'));
+    }
+
+    // Met à jour une catégorie
+    public function update(Request $request, Category $category)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
+        ]);
+
+        $category->update($validated);
+
+        return redirect()->route('categories.index')
+            ->with('success', 'Catégorie mise à jour avec succès !');
+    }
+
+    // Supprime une catégorie
+    public function destroy(Category $category)
+    {
+        // Vérifier si la catégorie a des tâches associées
+        if ($category->tasks()->count() > 0) {
+            return redirect()->route('categories.index')
+                ->with('error', 'Impossible de supprimer une catégorie qui contient des tâches.');
+        }
+
+        $category->delete();
+
+        return redirect()->route('categories.index')
+            ->with('success', 'Catégorie supprimée avec succès !');
+    }
+}
